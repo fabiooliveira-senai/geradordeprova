@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { ChevronLeft, Printer, FileText, RotateCcw, Eye, EyeOff } from 'lucide-react';
+import { ChevronLeft, Printer, FileText, RotateCcw, Eye, EyeOff, Download } from 'lucide-react';
 import { useProva } from '../../context/ProvaContext';
+import { downloadMoodleXml } from '../../services/moodleExportService';
 
 export default function Step4VisualizarProva() {
   const { questoesGeradas, prevStep, resetProva, termoCapacidade } = useProva();
@@ -36,7 +37,10 @@ export default function Step4VisualizarProva() {
   };
 
   const handlePrint = () => {
-    window.print();
+    setViewMode('prova');
+    setTimeout(() => {
+      window.print();
+    }, 100);
   };
 
   const handlePrintGabarito = () => {
@@ -47,61 +51,78 @@ export default function Step4VisualizarProva() {
     }, 100);
   };
 
+  const handleExportMoodle = () => {
+    downloadMoodleXml(prova, termoCapacidade);
+  };
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Controles - não aparecem na impressão */}
       <div className="bg-white rounded-xl shadow-lg p-6 mb-6 no-print">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setViewMode('prova')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                viewMode === 'prova' 
-                  ? 'bg-[#004b8d] text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              <FileText size={18} />
-              Prova
-            </button>
-            <button
-              onClick={() => setViewMode('gabarito')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                viewMode === 'gabarito' 
-                  ? 'bg-[#004b8d] text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              <Eye size={18} />
-              Gabarito
-            </button>
-          </div>
+        {/* Linha 1: Visualização */}
+        <div className="flex items-center gap-3 mb-4">
+          <span className="text-sm font-medium text-gray-600">Visualizar:</span>
+          <button
+            onClick={() => setViewMode('prova')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+              viewMode === 'prova' 
+                ? 'bg-[#004b8d] text-white' 
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            <FileText size={18} />
+            Prova
+          </button>
+          <button
+            onClick={() => setViewMode('gabarito')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+              viewMode === 'gabarito' 
+                ? 'bg-[#004b8d] text-white' 
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            <Eye size={18} />
+            Gabarito
+          </button>
+          <button
+            onClick={() => setShowGabarito(!showGabarito)}
+            className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors ml-auto"
+          >
+            {showGabarito ? <EyeOff size={18} /> : <Eye size={18} />}
+            {showGabarito ? 'Ocultar Respostas' : 'Mostrar Respostas'}
+          </button>
+        </div>
 
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setShowGabarito(!showGabarito)}
-              className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              {showGabarito ? <EyeOff size={18} /> : <Eye size={18} />}
-              {showGabarito ? 'Ocultar Respostas' : 'Mostrar Respostas'}
-            </button>
-            
-            <button
-              onClick={handlePrint}
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-            >
-              <Printer size={18} />
-              Imprimir Prova
-            </button>
+        {/* Divisor */}
+        <div className="border-t border-gray-200 my-4"></div>
 
-            <button
-              onClick={handlePrintGabarito}
-              className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
-            >
-              <Printer size={18} />
-              Imprimir Gabarito
-            </button>
-          </div>
+        {/* Linha 2: Ações */}
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="text-sm font-medium text-gray-600">Ações:</span>
+          <button
+            onClick={handlePrint}
+            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          >
+            <Printer size={18} />
+            Imprimir Prova
+          </button>
+
+          <button
+            onClick={handlePrintGabarito}
+            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
+          >
+            <Printer size={18} />
+            Imprimir Gabarito
+          </button>
+
+          <button
+            onClick={handleExportMoodle}
+            className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+            title="Exportar para importação no Moodle"
+          >
+            <Download size={18} />
+            Exportar Moodle
+          </button>
         </div>
       </div>
 

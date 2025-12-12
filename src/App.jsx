@@ -1,5 +1,6 @@
 import { ProvaProvider, useProva, TIPO_AVALIACAO } from './context/ProvaContext';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import StepIndicator from './components/StepIndicator';
 import TipoAvaliacaoSelector from './components/TipoAvaliacaoSelector';
 import Step1DadosBasicos from './components/steps/Step1DadosBasicos';
@@ -22,17 +23,7 @@ function AppContent() {
           <TipoAvaliacaoSelector onSelect={selectTipoAvaliacao} />
         </main>
 
-        {/* Footer */}
-        <footer className="bg-gray-800 text-gray-400 py-6 mt-12 no-print">
-          <div className="max-w-6xl mx-auto px-4 text-center">
-            <p className="text-sm">
-              Gerador de Provas SENAI - Sistema de Avaliação da Educação Profissional
-            </p>
-            <p className="text-xs mt-2">
-              RAG Especialista + Metodologia SENAI de Educação Profissional (MSEP)
-            </p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     );
   }
@@ -82,17 +73,7 @@ function AppContent() {
         {renderStep()}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-800 text-gray-400 py-6 mt-12 no-print">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <p className="text-sm">
-            Gerador de Provas SENAI - Sistema de Avaliação da Educação Profissional
-          </p>
-          <p className="text-xs mt-2">
-            RAG Especialista + Metodologia SENAI de Educação Profissional (MSEP)
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
