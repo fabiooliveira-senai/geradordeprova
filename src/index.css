@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+:root {
+  --senai-blue: #004b8d;
+  --senai-blue-light: #0066cc;
+  --senai-red: #e30613;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+  
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  .prova-container {
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    max-width: 100% !important;
+  }
+
+  .bg-\[\\#004b8d\] {
+    background-color: #004b8d !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  table {
+    page-break-inside: avoid;
+  }
+
+  .item-container {
+    page-break-inside: avoid;
+  }
+}

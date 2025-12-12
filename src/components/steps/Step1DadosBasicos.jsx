@@ -1,0 +1,253 @@
+import { useState, useEffect } from 'react';
+import { ChevronRight, GraduationCap, BookOpen } from 'lucide-react';
+import { useProva } from '../../context/ProvaContext';
+import { cursos, TIPO_ENSINO, getTermoCapacidade } from '../../data/cursos';
+
+export default function Step1DadosBasicos() {
+  const { dadosProva, updateDadosProva, nextStep } = useProva();
+  const [errors, setErrors] = useState({});
+
+  // Filtrar cursos por tipo de ensino
+  const cursosFiltrados = cursos.filter(c => c.tipo === dadosProva.tipoEnsino);
+
+  // Obter unidades curriculares do curso selecionado
+  const cursoSelecionado = cursos.find(c => c.id === dadosProva.cursoId);
+  const unidadesCurriculares = cursoSelecionado?.unidadesCurriculares || [];
+
+  // Atualizar curso quando mudar tipo de ensino
+  useEffect(() => {
+    if (dadosProva.cursoId) {
+      const cursoAtual = cursos.find(c => c.id === dadosProva.cursoId);
+      if (cursoAtual && cursoAtual.tipo !== dadosProva.tipoEnsino) {
+        updateDadosProva({ cursoId: '', curso: '', unidadeCurricular: '', capacidades: [] });
+      }
+    }
+  }, [dadosProva.tipoEnsino]);
+
+  const handleCursoChange = (cursoId) => {
+    const curso = cursos.find(c => c.id === cursoId);
+    updateDadosProva({
+      cursoId,
+      curso: curso?.nome || '',
+      unidadeCurricular: '',
+      capacidades: []
+    });
+  };
+
+  const handleUnidadeCurricularChange = (ucId) => {
+    const uc = unidadesCurriculares.find(u => u.id === ucId);
+    updateDadosProva({
+      unidadeCurricular: uc?.nome || '',
+      capacidades: [] // Reset capacidades quando mudar UC
+    });
+  };
+
+  const validate = () => {
+    const newErrors = {};
+    
+    if (!dadosProva.turma.trim()) newErrors.turma = 'Campo obrigatório';
+    if (!dadosProva.professor.trim()) newErrors.professor = 'Campo obrigatório';
+    if (!dadosProva.cursoId) newErrors.curso = 'Selecione um curso';
+    if (!dadosProva.unidadeCurricular) newErrors.unidadeCurricular = 'Selecione uma unidade curricular';
+    if (!dadosProva.data) newErrors.data = 'Campo obrigatório';
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNext = () => {
+    if (validate()) {
+      nextStep();
+    }
+  };
+
+  const termoCapacidade = getTermoCapacidade(dadosProva.tipoEnsino);
+
+  return (
+    <div className="max-w-2xl mx-auto">
+      <div className="bg-white rounded-xl shadow-lg p-8">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+          <BookOpen className="text-[#004b8d]" />
+          Dados Básicos da Prova
+        </h2>
+
+        <div className="space-y-6">
+          {/* Tipo de Ensino */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-3">
+              Tipo de Ensino
+            </label>
+            <div className="grid grid-cols-2 gap-4">
+              <button
+                type="button"
+                onClick={() => updateDadosProva({ tipoEnsino: TIPO_ENSINO.TECNICO })}
+                className={`
+                  p-4 rounded-lg border-2 transition-all text-left
+                  ${dadosProva.tipoEnsino === TIPO_ENSINO.TECNICO
+                    ? 'border-[#004b8d] bg-blue-50'
+                    : 'border-gray-200 hover:border-gray-300'
+                  }
+                `}
+              >
+                <div className="flex items-center gap-3">
+                  <GraduationCap className={dadosProva.tipoEnsino === TIPO_ENSINO.TECNICO ? 'text-[#004b8d]' : 'text-gray-400'} />
+                  <div>
+                    <p className="font-semibold">Ensino Técnico</p>
+                    <p className="text-sm text-gray-500">Usa "Capacidade"</p>
+                  </div>
+                </div>
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => updateDadosProva({ tipoEnsino: TIPO_ENSINO.INTEGRADO })}
+                className={`
+                  p-4 rounded-lg border-2 transition-all text-left
+                  ${dadosProva.tipoEnsino === TIPO_ENSINO.INTEGRADO
+                    ? 'border-[#004b8d] bg-blue-50'
+                    : 'border-gray-200 hover:border-gray-300'
+                  }
+                `}
+              >
+                <div className="flex items-center gap-3">
+                  <GraduationCap className={dadosProva.tipoEnsino === TIPO_ENSINO.INTEGRADO ? 'text-[#004b8d]' : 'text-gray-400'} />
+                  <div>
+                    <p className="font-semibold">Ensino Médio Integrado</p>
+                    <p className="text-sm text-gray-500">Usa "Habilidade"</p>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          {/* Curso */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Curso Técnico em <span className="text-red-500">*</span>
+            </label>
+            <select
+              value={dadosProva.cursoId}
+              onChange={(e) => handleCursoChange(e.target.value)}
+              className={`
+                w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none
+                ${errors.curso ? 'border-red-500' : 'border-gray-300'}
+              `}
+            >
+              <option value="">Selecione o curso...</option>
+              {cursosFiltrados.map(curso => (
+                <option key={curso.id} value={curso.id}>
+                  {curso.nome}
+                </option>
+              ))}
+            </select>
+            {errors.curso && <p className="mt-1 text-sm text-red-500">{errors.curso}</p>}
+          </div>
+
+          {/* Unidade Curricular */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Unidade Curricular <span className="text-red-500">*</span>
+            </label>
+            <select
+              value={unidadesCurriculares.find(u => u.nome === dadosProva.unidadeCurricular)?.id || ''}
+              onChange={(e) => handleUnidadeCurricularChange(e.target.value)}
+              disabled={!dadosProva.cursoId}
+              className={`
+                w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none
+                ${errors.unidadeCurricular ? 'border-red-500' : 'border-gray-300'}
+                ${!dadosProva.cursoId ? 'bg-gray-100 cursor-not-allowed' : ''}
+              `}
+            >
+              <option value="">Selecione a unidade curricular...</option>
+              {unidadesCurriculares.map(uc => (
+                <option key={uc.id} value={uc.id}>
+                  {uc.nome} ({uc.cargaHoraria}h)
+                </option>
+              ))}
+            </select>
+            {errors.unidadeCurricular && <p className="mt-1 text-sm text-red-500">{errors.unidadeCurricular}</p>}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Turma */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Turma <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={dadosProva.turma}
+                onChange={(e) => updateDadosProva({ turma: e.target.value })}
+                placeholder="Ex: T DESI 2024/1 M"
+                className={`
+                  w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none
+                  ${errors.turma ? 'border-red-500' : 'border-gray-300'}
+                `}
+              />
+              {errors.turma && <p className="mt-1 text-sm text-red-500">{errors.turma}</p>}
+            </div>
+
+            {/* Data */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Data <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                value={dadosProva.data}
+                onChange={(e) => updateDadosProva({ data: e.target.value })}
+                className={`
+                  w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none
+                  ${errors.data ? 'border-red-500' : 'border-gray-300'}
+                `}
+              />
+              {errors.data && <p className="mt-1 text-sm text-red-500">{errors.data}</p>}
+            </div>
+          </div>
+
+          {/* Professor */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Professor(a) <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={dadosProva.professor}
+              onChange={(e) => updateDadosProva({ professor: e.target.value })}
+              placeholder="Nome completo do professor"
+              className={`
+                w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none
+                ${errors.professor ? 'border-red-500' : 'border-gray-300'}
+              `}
+            />
+            {errors.professor && <p className="mt-1 text-sm text-red-500">{errors.professor}</p>}
+          </div>
+
+          {/* Info box */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <p className="text-sm text-blue-800">
+              <strong>Termo utilizado:</strong> {termoCapacidade}
+              <br />
+              <span className="text-blue-600">
+                {dadosProva.tipoEnsino === TIPO_ENSINO.INTEGRADO 
+                  ? 'O Ensino Médio Integrado ao Técnico (SESI/SENAI) utiliza o termo "Habilidade".'
+                  : 'O Ensino Técnico utiliza o termo "Capacidade Técnica".'}
+              </span>
+            </p>
+          </div>
+        </div>
+
+        {/* Botão Próximo */}
+        <div className="mt-8 flex justify-end">
+          <button
+            onClick={handleNext}
+            className="flex items-center gap-2 px-6 py-3 bg-[#004b8d] text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold"
+          >
+            Próximo: Selecionar {termoCapacidade}s
+            <ChevronRight size={20} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
