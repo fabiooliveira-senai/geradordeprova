@@ -9,6 +9,8 @@ import Step3GerarQuestoes from './components/steps/Step3GerarQuestoes';
 import Step4VisualizarProva from './components/steps/Step4VisualizarProva';
 import Step3GerarPratica from './components/steps/pratica/Step3GerarPratica';
 import Step4VisualizarPratica from './components/steps/pratica/Step4VisualizarPratica';
+import Step3GerarSA from './components/steps/sa/Step3GerarSA';
+import Step4VisualizarSA from './components/steps/sa/Step4VisualizarSA';
 
 function AppContent() {
   const { currentStep, tipoAvaliacao, selectTipoAvaliacao } = useProva();
@@ -56,6 +58,22 @@ function AppContent() {
           return <Step3GerarPratica />;
         case 4:
           return <Step4VisualizarPratica />;
+        default:
+          return <Step1DadosBasicos />;
+      }
+    }
+
+    // Situação de Aprendizagem
+    if (tipoAvaliacao === TIPO_AVALIACAO.SITUACAO_APRENDIZAGEM) {
+      switch (currentStep) {
+        case 1:
+          return <Step1DadosBasicos />;
+        case 2:
+          return <Step2Capacidades />;
+        case 3:
+          return <Step3GerarSA />;
+        case 4:
+          return <Step4VisualizarSA />;
         default:
           return <Step1DadosBasicos />;
       }

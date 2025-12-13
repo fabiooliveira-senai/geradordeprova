@@ -15,11 +15,30 @@ const stepsPratica = [
   { id: 4, name: 'Visualizar Prática' }
 ];
 
+const stepsSA = [
+  { id: 1, name: 'Dados Básicos' },
+  { id: 2, name: 'Capacidades' },
+  { id: 3, name: 'Gerar SA' },
+  { id: 4, name: 'Visualizar SA' }
+];
+
 export default function StepIndicator() {
-  const { currentStep, goToStep, questoesGeradas, avaliacaoPraticaGerada, tipoAvaliacao } = useProva();
+  const { currentStep, goToStep, questoesGeradas, avaliacaoPraticaGerada, situacaoAprendizagemGerada, tipoAvaliacao } = useProva();
   
-  const steps = tipoAvaliacao === TIPO_AVALIACAO.PRATICA ? stepsPratica : stepsObjetiva;
-  const hasResult = tipoAvaliacao === TIPO_AVALIACAO.PRATICA ? avaliacaoPraticaGerada : questoesGeradas;
+  const getSteps = () => {
+    if (tipoAvaliacao === TIPO_AVALIACAO.PRATICA) return stepsPratica;
+    if (tipoAvaliacao === TIPO_AVALIACAO.SITUACAO_APRENDIZAGEM) return stepsSA;
+    return stepsObjetiva;
+  };
+
+  const getHasResult = () => {
+    if (tipoAvaliacao === TIPO_AVALIACAO.PRATICA) return avaliacaoPraticaGerada;
+    if (tipoAvaliacao === TIPO_AVALIACAO.SITUACAO_APRENDIZAGEM) return situacaoAprendizagemGerada;
+    return questoesGeradas;
+  };
+
+  const steps = getSteps();
+  const hasResult = getHasResult();
 
   const canNavigateTo = (stepId) => {
     // Pode voltar para qualquer passo anterior

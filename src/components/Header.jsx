@@ -1,4 +1,4 @@
-import { RotateCcw, Brain, FileText, Wrench } from 'lucide-react';
+import { RotateCcw, Brain, FileText, Wrench, BookOpen } from 'lucide-react';
 import { useProva, TIPO_AVALIACAO } from '../context/ProvaContext';
 import { isApiConfigured } from '../services/llmService';
 
@@ -26,15 +26,22 @@ export default function Header() {
                 {tipoAvaliacao && (
                   <>
                     <span className="mx-1">•</span>
-                    {tipoAvaliacao === TIPO_AVALIACAO.OBJETIVA ? (
+                    {tipoAvaliacao === TIPO_AVALIACAO.OBJETIVA && (
                       <span className="flex items-center gap-1">
                         <FileText size={12} />
                         Objetiva
                       </span>
-                    ) : (
+                    )}
+                    {tipoAvaliacao === TIPO_AVALIACAO.PRATICA && (
                       <span className="flex items-center gap-1 text-orange-300">
                         <Wrench size={12} />
                         Prática
+                      </span>
+                    )}
+                    {tipoAvaliacao === TIPO_AVALIACAO.SITUACAO_APRENDIZAGEM && (
+                      <span className="flex items-center gap-1 text-green-300">
+                        <BookOpen size={12} />
+                        Situação de Aprendizagem
                       </span>
                     )}
                   </>

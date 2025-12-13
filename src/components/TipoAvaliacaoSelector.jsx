@@ -1,110 +1,79 @@
-import { FileText, Wrench } from 'lucide-react';
+import { FileText, Wrench, BookOpen, ChevronRight } from 'lucide-react';
 
 export default function TipoAvaliacaoSelector({ onSelect }) {
+  const opcoes = [
+    {
+      id: 'objetiva',
+      titulo: 'Avaliação Objetiva',
+      descricao: 'Questões de múltipla escolha no padrão SAEP',
+      icon: FileText,
+      bgIcon: 'bg-blue-50',
+      textIcon: 'text-blue-600',
+      hoverBg: 'hover:border-blue-500 hover:bg-blue-50',
+      hoverIconBg: 'group-hover:bg-blue-600',
+      hoverText: 'group-hover:text-blue-600'
+    },
+    {
+      id: 'pratica',
+      titulo: 'Avaliação Prática',
+      descricao: 'Desafios práticos com critérios de avaliação',
+      icon: Wrench,
+      bgIcon: 'bg-orange-50',
+      textIcon: 'text-orange-600',
+      hoverBg: 'hover:border-orange-500 hover:bg-orange-50',
+      hoverIconBg: 'group-hover:bg-orange-600',
+      hoverText: 'group-hover:text-orange-600'
+    },
+    {
+      id: 'situacao_aprendizagem',
+      titulo: 'Situação de Aprendizagem',
+      descricao: 'Plano de ensino contextualizado',
+      icon: BookOpen,
+      bgIcon: 'bg-green-50',
+      textIcon: 'text-green-600',
+      hoverBg: 'hover:border-green-500 hover:bg-green-50',
+      hoverIconBg: 'group-hover:bg-green-600',
+      hoverText: 'group-hover:text-green-600'
+    }
+  ];
+
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="text-center mb-8">
+    <div className="max-w-2xl mx-auto">
+      <div className="text-center mb-10">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Selecione o Tipo de Avaliação
+          O que você deseja criar?
         </h2>
-        <p className="text-gray-600">
-          Escolha entre avaliação objetiva (múltipla escolha) ou prática (situação-problema)
+        <p className="text-gray-500">
+          Selecione uma opção para começar
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        {/* Card Avaliação Objetiva */}
-        <button
-          onClick={() => onSelect('objetiva')}
-          className="group bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-blue-500 text-left"
-        >
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center group-hover:bg-blue-500 transition-colors">
-              <FileText className="w-8 h-8 text-blue-600 group-hover:text-white transition-colors" />
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-gray-800">Avaliação Objetiva</h3>
-              <span className="text-sm text-blue-600 font-medium">Múltipla Escolha</span>
-            </div>
-          </div>
-          
-          <p className="text-gray-600 mb-4">
-            Questões de múltipla escolha com contexto, comando e alternativas seguindo o padrão SAEP do SENAI.
-          </p>
-          
-          <ul className="space-y-2 text-sm text-gray-500">
-            <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
-              Questões com 4 alternativas (A, B, C, D)
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
-              Contexto + Comando + Alternativas
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
-              Gabarito automático
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
-              Avalia conhecimentos teóricos
-            </li>
-          </ul>
+      <div className="space-y-4">
+        {opcoes.map((opcao) => {
+          const Icon = opcao.icon;
+          return (
+            <button
+              key={opcao.id}
+              onClick={() => onSelect(opcao.id)}
+              className={`w-full group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border-2 border-transparent p-5 flex items-center gap-5 ${opcao.hoverBg}`}
+            >
+              <div className={`w-14 h-14 ${opcao.bgIcon} rounded-xl flex items-center justify-center ${opcao.hoverIconBg} transition-colors flex-shrink-0`}>
+                <Icon className={`w-7 h-7 ${opcao.textIcon} group-hover:text-white transition-colors`} />
+              </div>
+              
+              <div className="flex-1 text-left">
+                <h3 className={`text-lg font-semibold text-gray-800 ${opcao.hoverText} transition-colors`}>
+                  {opcao.titulo}
+                </h3>
+                <p className="text-sm text-gray-500">
+                  {opcao.descricao}
+                </p>
+              </div>
 
-          <div className="mt-6 text-blue-600 font-medium group-hover:translate-x-2 transition-transform flex items-center gap-2">
-            Criar Avaliação Objetiva →
-          </div>
-        </button>
-
-        {/* Card Avaliação Prática */}
-        <button
-          onClick={() => onSelect('pratica')}
-          className="group bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-orange-500 text-left"
-        >
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-16 h-16 bg-orange-100 rounded-xl flex items-center justify-center group-hover:bg-orange-500 transition-colors">
-              <Wrench className="w-8 h-8 text-orange-600 group-hover:text-white transition-colors" />
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-gray-800">Avaliação Prática</h3>
-              <span className="text-sm text-orange-600 font-medium">Situação-Problema</span>
-            </div>
-          </div>
-          
-          <p className="text-gray-600 mb-4">
-            Desafios práticos com contextualização, atividades e critérios de avaliação baseados em competências.
-          </p>
-          
-          <ul className="space-y-2 text-sm text-gray-500">
-            <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-orange-500 rounded-full"></span>
-              Contextualização do mundo do trabalho
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-orange-500 rounded-full"></span>
-              Desafio + Atividades + Entregas
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-orange-500 rounded-full"></span>
-              Lista de verificação com critérios
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-orange-500 rounded-full"></span>
-              Avalia capacidades técnicas e práticas
-            </li>
-          </ul>
-
-          <div className="mt-6 text-orange-600 font-medium group-hover:translate-x-2 transition-transform flex items-center gap-2">
-            Criar Avaliação Prática →
-          </div>
-        </button>
-      </div>
-
-      <div className="mt-8 bg-blue-50 rounded-lg p-4 text-center">
-        <p className="text-sm text-blue-800">
-          <strong>Dica:</strong> Use avaliações objetivas para verificar conhecimentos teóricos e 
-          avaliações práticas para avaliar capacidades técnicas e psicomotoras em situações reais de trabalho.
-        </p>
+              <ChevronRight className={`w-5 h-5 text-gray-400 ${opcao.hoverText} group-hover:translate-x-1 transition-all`} />
+            </button>
+          );
+        })}
       </div>
     </div>
   );

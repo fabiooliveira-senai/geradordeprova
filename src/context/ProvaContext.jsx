@@ -7,7 +7,8 @@ const ProvaContext = createContext(null);
 // Tipos de avaliação
 export const TIPO_AVALIACAO = {
   OBJETIVA: 'objetiva',
-  PRATICA: 'pratica'
+  PRATICA: 'pratica',
+  SITUACAO_APRENDIZAGEM: 'situacao_aprendizagem'
 };
 
 export function ProvaProvider({ children }) {
@@ -37,6 +38,9 @@ export function ProvaProvider({ children }) {
 
   // Estado da avaliação prática gerada
   const [avaliacaoPraticaGerada, setAvaliacaoPraticaGerada] = useState(null);
+
+  // Estado da situação de aprendizagem gerada
+  const [situacaoAprendizagemGerada, setSituacaoAprendizagemGerada] = useState(null);
 
   // Estado de loading
   const [isLoading, setIsLoading] = useState(false);
@@ -72,6 +76,7 @@ export function ProvaProvider({ children }) {
     });
     setQuestoesGeradas(null);
     setAvaliacaoPraticaGerada(null);
+    setSituacaoAprendizagemGerada(null);
     setTipoAvaliacao(null);
     setCurrentStep(1);
     setError(null);
@@ -115,6 +120,10 @@ export function ProvaProvider({ children }) {
     // Avaliação prática
     avaliacaoPraticaGerada,
     setAvaliacaoPraticaGerada,
+
+    // Situação de Aprendizagem
+    situacaoAprendizagemGerada,
+    setSituacaoAprendizagemGerada,
     
     // Loading e erro
     isLoading,
