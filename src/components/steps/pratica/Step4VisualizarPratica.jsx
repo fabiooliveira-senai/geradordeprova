@@ -90,7 +90,7 @@ export default function Step4VisualizarPratica() {
               <tr>
                 <td rowSpan="6" className="border border-black p-4 w-48 text-center align-middle">
                   <img 
-                    src="/senai.png" 
+                    src={`${import.meta.env.BASE_URL}senai.png`} 
                     alt="SENAI" 
                     className="w-full max-w-[150px] mx-auto mb-2"
                   />
@@ -246,7 +246,7 @@ export default function Step4VisualizarPratica() {
         <div className="bg-white rounded-xl shadow-lg p-8 prova-container" id="checklist-print">
           <div className="text-center mb-6">
             <img 
-              src="/senai.png" 
+              src={`${import.meta.env.BASE_URL}senai.png`} 
               alt="SENAI" 
               className="h-16 mx-auto mb-4"
             />

@@ -135,7 +135,7 @@ export default function Step4VisualizarProva() {
               <tr>
                 <td rowSpan="7" className="border border-black p-2 w-36 text-center align-middle">
                   <img 
-                    src="/senai.png" 
+                    src={`${import.meta.env.BASE_URL}senai.png`} 
                     alt="SENAI" 
                     className="w-full max-w-[100px] mx-auto mb-1"
                   />
@@ -258,7 +258,7 @@ export default function Step4VisualizarProva() {
         <div className="bg-white rounded-xl shadow-lg p-8 prova-container" id="gabarito-print">
           <div className="text-center mb-8">
             <img 
-              src="/senai.png" 
+              src={`${import.meta.env.BASE_URL}senai.png`} 
               alt="SENAI" 
               className="h-16 mx-auto mb-4"
             />

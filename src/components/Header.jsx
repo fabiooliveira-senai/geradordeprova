@@ -13,7 +13,7 @@ export default function Header() {
           <div className="flex items-center gap-4">
             <div className="bg-white p-2 rounded-lg">
               <img 
-                src="/senai.png" 
+                src={`${import.meta.env.BASE_URL}senai.png`} 
                 alt="SENAI" 
                 className="h-10 w-auto"
               />

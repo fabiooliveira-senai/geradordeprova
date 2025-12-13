@@ -102,7 +102,7 @@ export default function Step4VisualizarSA() {
             <tbody>
               <tr>
                 <td rowSpan="4" className="border border-black p-2 w-32 text-center align-middle">
-                  <img src="/senai.png" alt="SENAI" className="w-full max-w-[80px] mx-auto mb-1" />
+                  <img src={`${import.meta.env.BASE_URL}senai.png`} alt="SENAI" className="w-full max-w-[80px] mx-auto mb-1" />
                   <p className="font-bold text-xs">SENAI</p>
                   <p className="text-xs">Santa Catarina</p>
                 </td>
